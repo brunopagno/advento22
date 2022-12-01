@@ -19,6 +19,6 @@ func main() {
 	advent.Day(day)
 	after := time.Now()
 
-	fmt.Printf("%f [Go]", after.Sub(before).Seconds())
+	fmt.Printf("%fs [Go]", after.Sub(before).Seconds())
 	fmt.Println()
 }
