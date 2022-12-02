@@ -1,22 +1,26 @@
 #!/bin/bash
 
-DAY=$1
+DAY=(0 1 2)
 
-echo "Running day $DAY"
+cd data
 
-echo "---------"
+for i in ${DAY[@]}
+do
+  echo ""
+  echo "#### DAY $i ####"
+  echo ""
 
-echo "Ruby!"
+  echo "Ruby!"
 
-cd ruby
-ruby advent.rb $DAY
+  cd ../ruby
+  ruby advent.rb $i
 
-echo "---------"
+  echo "---------"
 
-echo "Go!"
-cd ../go
-go run . $DAY
+  echo "Go!"
+  cd ../go
+  go run . $i
+done
 
-echo "---------"
-
-echo "Finished!"
+echo ""
+echo "#### END ####"

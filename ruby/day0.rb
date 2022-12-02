@@ -1,8 +1,6 @@
 def day0
-  1000.times do
-    p1
-    p2
-  end
+  p1
+  p2
 end
 
 def p1
@@ -18,7 +16,7 @@ def p1
     prev = el
   end
 
-  # puts "Part 1: #{count}"
+  puts "Part 1: #{count}"
 end
 
 def p2
@@ -36,5 +34,5 @@ def p2
     end
   end
 
-  # puts "Part 2: #{count}"
+  puts "Part 2: #{count}"
 end

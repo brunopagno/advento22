@@ -2,15 +2,14 @@ package advent
 
 import (
 	"brunopagno/adventofcode22/m/util"
+	"fmt"
 	"strconv"
 	"strings"
 )
 
 func day0() {
-	for i := 0; i < 1000; i++ {
-		d0p1()
-		d0p2()
-	}
+	d0p1()
+	d0p2()
 }
 
 func d0p1() {
@@ -29,8 +28,8 @@ func d0p1() {
 		prev = el
 	}
 
-	// fmt.Printf("The result is [%d]", count)
-	// fmt.Println()
+	fmt.Printf("The result is [%d]", count)
+	fmt.Println()
 }
 
 func d0p2() {
@@ -53,6 +52,6 @@ func d0p2() {
 		}
 	}
 
-	// fmt.Printf("The result is [%d]", count)
-	// fmt.Println()
+	fmt.Printf("The result is [%d]", count)
+	fmt.Println()
 }
