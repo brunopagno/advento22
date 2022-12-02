@@ -5,5 +5,7 @@ func Day(day string) {
 		day0()
 	} else if day == "1" {
 		day1()
+	} else if day == "2" {
+		day2()
 	}
 }

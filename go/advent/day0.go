@@ -8,12 +8,12 @@ import (
 
 func day0() {
 	for i := 0; i < 1000; i++ {
-		p1()
-		p2()
+		d0p1()
+		d0p2()
 	}
 }
 
-func p1() {
+func d0p1() {
 	in, err := os.ReadFile("../data/day0.txt")
 	if err != nil {
 		panic(err)
@@ -36,7 +36,7 @@ func p1() {
 	// fmt.Println()
 }
 
-func p2() {
+func d0p2() {
 	in, err := os.ReadFile("../data/day0.txt")
 	if err != nil {
 		panic(err)
