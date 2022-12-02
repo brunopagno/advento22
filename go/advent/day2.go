@@ -17,11 +17,6 @@ const (
 	scissors = 2
 )
 
-type Round struct {
-	oppo rune
-	me   rune
-}
-
 func d2p1() {
 	in, err := os.ReadFile("../data/day2.txt")
 	if err != nil {
@@ -29,19 +24,14 @@ func d2p1() {
 	}
 
 	roundLines := strings.Split(string(in), "\n")
-	rounds := make([]Round, 0, len(roundLines))
+	totalScore := 0
 	for _, line := range roundLines {
 		if len(line) == 0 { // skip empty lines
 			continue
 		}
 
 		results := []rune(line)
-		rounds = append(rounds, Round{oppo: (results[0] - 'A'), me: (results[2] - 'X')})
-	}
-
-	totalScore := 0
-	for _, round := range rounds {
-		totalScore += _score(round.oppo, round.me)
+		totalScore += _score((results[0] - 'A'), (results[2] - 'X'))
 	}
 
 	fmt.Println(totalScore)
@@ -53,7 +43,7 @@ func d2p2() {
 		panic(err)
 	}
 
-	rounds := make([]Round, 0, len(in))
+	totalScore := 0
 	for _, line := range strings.Split(string(in), "\n") {
 		if len(line) == 0 { // skip empty lines
 			continue
@@ -70,12 +60,7 @@ func d2p2() {
 			results[2] = (results[0] + 1) % 3
 		}
 
-		rounds = append(rounds, Round{oppo: results[0], me: results[2]})
-	}
-
-	totalScore := 0
-	for _, round := range rounds {
-		totalScore += _score(round.oppo, round.me)
+		totalScore += _score(results[0], results[2])
 	}
 
 	fmt.Println(totalScore)
