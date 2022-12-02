@@ -1,8 +1,8 @@
 package advent
 
 import (
+	"brunopagno/adventofcode22/m/util"
 	"fmt"
-	"os"
 	"sort"
 	"strconv"
 	"strings"
@@ -14,12 +14,9 @@ func day1() {
 }
 
 func d1p1() {
-	input, err := os.ReadFile("../data/day1.txt")
-	if err != nil {
-		panic(err)
-	}
+	input := util.InputDataForDay(1)
 
-	strPieces := strings.Split(string(input), "\n")
+	strPieces := strings.Split(input, "\n")
 
 	elves := make([]int, 0, len(strPieces))
 	group := make([]int, 0, len(strPieces))
@@ -51,12 +48,9 @@ func d1p1() {
 }
 
 func d1p2() {
-	input, err := os.ReadFile("../data/day1.txt")
-	if err != nil {
-		panic(err)
-	}
+	input := util.InputDataForDay(1)
 
-	strPieces := strings.Split(string(input), "\n")
+	strPieces := strings.Split(input, "\n")
 
 	elves := make([]int, 0, len(strPieces))
 	group := make([]int, 0, len(strPieces))

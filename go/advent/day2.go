@@ -1,8 +1,8 @@
 package advent
 
 import (
+	"brunopagno/adventofcode22/m/util"
 	"fmt"
-	"os"
 	"strings"
 )
 
@@ -18,10 +18,7 @@ const (
 )
 
 func d2p1() {
-	in, err := os.ReadFile("../data/day2.txt")
-	if err != nil {
-		panic(err)
-	}
+	in := util.InputDataForDay(2)
 
 	roundLines := strings.Split(string(in), "\n")
 	totalScore := 0
@@ -38,10 +35,7 @@ func d2p1() {
 }
 
 func d2p2() {
-	in, err := os.ReadFile("../data/day2.txt")
-	if err != nil {
-		panic(err)
-	}
+	in := util.InputDataForDay(2)
 
 	totalScore := 0
 	for _, line := range strings.Split(string(in), "\n") {

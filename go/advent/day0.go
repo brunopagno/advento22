@@ -1,7 +1,7 @@
 package advent
 
 import (
-	"os"
+	"brunopagno/adventofcode22/m/util"
 	"strconv"
 	"strings"
 )
@@ -14,14 +14,11 @@ func day0() {
 }
 
 func d0p1() {
-	in, err := os.ReadFile("../data/day0.txt")
-	if err != nil {
-		panic(err)
-	}
+	in := util.InputDataForDay(0)
 
 	prev := -1
 	count := 0
-	for _, line := range strings.Split(string(in), "\n") {
+	for _, line := range strings.Split(in, "\n") {
 		el, err := strconv.Atoi(line)
 		if err != nil { // skip blank lines
 			continue
@@ -37,11 +34,9 @@ func d0p1() {
 }
 
 func d0p2() {
-	in, err := os.ReadFile("../data/day0.txt")
-	if err != nil {
-		panic(err)
-	}
-	raw := strings.Split(string(in), "\n")
+	in := util.InputDataForDay(0)
+
+	raw := strings.Split(in, "\n")
 	ee := make([]int, len(raw))
 	for i, v := range raw {
 		el, err := strconv.Atoi(v)
