@@ -12,9 +12,9 @@ func day2() {
 }
 
 const (
-	rock     = 'R'
-	paper    = 'P'
-	scissors = 'S'
+	rock     = 0
+	paper    = 1
+	scissors = 2
 )
 
 type Round struct {
@@ -28,29 +28,15 @@ func d2p1() {
 		panic(err)
 	}
 
-	rounds := make([]Round, 0, len(in))
-	for _, line := range strings.Split(string(in), "\n") {
+	roundLines := strings.Split(string(in), "\n")
+	rounds := make([]Round, 0, len(roundLines))
+	for _, line := range roundLines {
 		if len(line) == 0 { // skip empty lines
 			continue
 		}
 
 		results := []rune(line)
-		if results[0] == 'A' {
-			results[0] = rock
-		} else if results[0] == 'B' {
-			results[0] = paper
-		} else if results[0] == 'C' {
-			results[0] = scissors
-		}
-		if results[2] == 'X' {
-			results[2] = rock
-		} else if results[2] == 'Y' {
-			results[2] = paper
-		} else if results[2] == 'Z' {
-			results[2] = scissors
-		}
-
-		rounds = append(rounds, Round{oppo: results[0], me: results[2]})
+		rounds = append(rounds, Round{oppo: (results[0] - 'A'), me: (results[2] - 'X')})
 	}
 
 	totalScore := 0
@@ -74,31 +60,14 @@ func d2p2() {
 		}
 
 		results := []rune(line)
-		if results[0] == 'A' {
-			results[0] = rock
-		} else if results[0] == 'B' {
-			results[0] = paper
-		} else if results[0] == 'C' {
-			results[0] = scissors
-		}
+		results[0] -= 'A'
+
 		if results[2] == 'X' {
-			if results[0] == rock {
-				results[2] = scissors
-			} else if results[0] == paper {
-				results[2] = rock
-			} else if results[0] == scissors {
-				results[2] = paper
-			}
+			results[2] = (results[0] - 1 + 3) % 3
 		} else if results[2] == 'Y' {
 			results[2] = results[0]
 		} else if results[2] == 'Z' {
-			if results[0] == rock {
-				results[2] = paper
-			} else if results[0] == paper {
-				results[2] = scissors
-			} else if results[0] == scissors {
-				results[2] = rock
-			}
+			results[2] = (results[0] + 1) % 3
 		}
 
 		rounds = append(rounds, Round{oppo: results[0], me: results[2]})
@@ -115,9 +84,7 @@ func d2p2() {
 func _score(oppo_play, my_play rune) (score int) {
 	if oppo_play == my_play {
 		score += 3
-	} else if (my_play == rock && oppo_play == scissors) ||
-		(my_play == paper && oppo_play == rock) ||
-		(my_play == scissors && oppo_play == paper) {
+	} else if (oppo_play+1)%3 == my_play {
 		score += 6
 	}
 
