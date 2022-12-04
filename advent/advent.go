@@ -9,5 +9,7 @@ func Day(day string) {
 		day2()
 	} else if day == "3" {
 		day3()
-	}
+	} else if day == "4" {
+    day4()
+  }
 }
