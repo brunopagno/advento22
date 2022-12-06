@@ -15,10 +15,10 @@ func main() {
 
 	day := os.Args[1]
 
-	before := time.Now()
+	bf := time.Now()
 	advent.Day(day)
-	after := time.Now()
+	af := time.Now()
 
-	fmt.Printf("%fs [Go]", after.Sub(before).Seconds())
+	fmt.Printf("%fs [Go]", af.Sub(bf).Seconds())
 	fmt.Println()
 }
