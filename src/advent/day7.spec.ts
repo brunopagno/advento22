@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { buildTreeFrom, sizeOf, part1, part2 } from "./day7";
+import { buildTreeFrom, sizeOf, handleCommand, part1, part2 } from "./day7";
 
 describe("day7", () => {
   describe("buildTreeFrom", () => {
@@ -103,6 +103,78 @@ describe("day7", () => {
       };
 
       expect(sizeOf(input)).toBe(11100);
+    });
+  });
+
+  describe("handleCommand", () => {
+    const exampleTree = {
+      name: "a",
+      type: "folder" as const,
+      children: [
+        {
+          name: "b",
+          type: "folder" as const,
+          children: [],
+          size: 0,
+        },
+      ],
+      size: 0,
+    };
+
+    describe("cd", () => {
+      test("should change the current node", () => {
+        const command = "$ cd b";
+        const result = handleCommand(command, exampleTree);
+        expect(result).toBe(exampleTree.children[0]);
+      });
+    });
+
+    describe("ls", () => {
+      test("should do nothing", () => {
+        const command = "$ ls";
+        const result = handleCommand(command, exampleTree);
+        expect(result).toBe(exampleTree);
+      });
+    });
+
+    describe("dir", () => {
+      test("should create a new folder", () => {
+        const command = "dir c";
+        const result = handleCommand(command, exampleTree);
+        expect(result).toEqual(
+          expect.objectContaining({
+            children: expect.arrayContaining([
+              {
+                name: "c",
+                type: "folder",
+                children: [],
+                size: 0,
+                parent: expect.any(Object),
+              },
+            ]),
+          })
+        );
+      });
+    });
+
+    describe("file", () => {
+      test("should create a new file", () => {
+        const command = "1234 d.txt";
+        const result = handleCommand(command, exampleTree);
+        expect(result).toEqual(
+          expect.objectContaining({
+            children: expect.arrayContaining([
+              {
+                name: "d.txt",
+                type: "file",
+                size: 1234,
+                children: [],
+                parent: expect.any(Object),
+              },
+            ]),
+          })
+        );
+      });
     });
   });
 

@@ -76,38 +76,62 @@ export function buildTreeFrom(cmd: Array<string>): Node {
 
   let cwd: Node = root;
   cmd.slice(1).forEach((line) => {
-    if (line.startsWith("$ cd")) {
-      const target = line.split(" ")[2];
-      if (target == "..") {
-        if (!cwd.parent) {
-          throw new Error("Cannot cd .. from folder without parent");
-        }
-        cwd = cwd.parent;
-      } else {
-        cwd = cwd.children.find((child) => {
-          return child.name == target;
-        }) as Node;
-      }
-    } else if (line.startsWith("$ ls")) {
-      // do nothing I think
-    } else if (line.startsWith("dir")) {
-      cwd.children.push({
-        name: line.split(" ")[1],
-        type: "folder",
-        children: [],
-        parent: cwd,
-        size: 0,
-      });
-    } else {
-      cwd.children.push({
-        name: line.split(" ")[1],
-        type: "file",
-        children: [],
-        parent: cwd,
-        size: parseInt(line.split(" ")[0]),
-      });
-    }
+    cwd = handleCommand(line, cwd);
   });
 
   return root;
+}
+
+export function handleCommand(cmd: string, cwd: Node): Node {
+  if (cmd.startsWith("$ cd")) {
+    const target = cmd.split(" ")[2];
+    cwd = cd(target, cwd);
+  } else if (cmd.startsWith("$ ls")) {
+    // do nothing
+  } else if (cmd.startsWith("dir")) {
+    cwd = dir(cmd, cwd);
+  } else {
+    cwd = file(cmd, cwd);
+  }
+  return cwd;
+}
+
+function cd(target: string, cwd: Node): Node {
+  if (target == "..") {
+    if (!cwd.parent) {
+      throw new Error("Cannot cd .. from folder without parent");
+    }
+    cwd = cwd.parent;
+  } else {
+    let result = cwd.children.find((child) => {
+      return child.name == target;
+    });
+    if (!result) {
+      throw new Error("Cannot cd to folder that does not exist");
+    }
+    cwd = result;
+  }
+  return cwd;
+}
+
+function dir(cmd: string, cwd: Node): Node {
+  cwd.children.push({
+    name: cmd.split(" ")[1],
+    type: "folder",
+    children: [],
+    parent: cwd,
+    size: 0,
+  });
+  return cwd;
+}
+
+function file(cmd: string, cwd: Node): Node {
+  cwd.children.push({
+    name: cmd.split(" ")[1],
+    type: "file",
+    children: [],
+    parent: cwd,
+    size: parseInt(cmd.split(" ")[0]),
+  });
+  return cwd;
 }
