@@ -2,10 +2,8 @@ export function solve(input: Array<string>): [number, number] {
   return [part1(input), part2(input)];
 }
 
-function part1(input: Array<string>): number {
+export function part1(input: Array<string>): number {
   const tree = buildTreeFrom(input);
-
-  // printTree(tree);
 
   const sizeOfTree = sizeOf(tree);
   let total = sizeOfTree < 100000 ? sizeOfTree : 0;
@@ -21,14 +19,14 @@ function part1(input: Array<string>): number {
   return total;
 }
 
-function part2(input: Array<string>): number {
+export function part2(input: Array<string>): number {
   const tree = buildTreeFrom(input);
 
   const sizeOfTree = sizeOf(tree);
   const available = 70000000 - sizeOfTree;
   const target = 30000000 - available;
 
-  let current = available;
+  let current = sizeOfTree;
   forEachNode(tree, (node: Node) => {
     if (node.hasOwnProperty("children")) {
       const size = sizeOf(node);
@@ -104,17 +102,4 @@ function buildTreeFrom(cmd: Array<string>): DirNode {
   });
 
   return root;
-}
-
-function printTree(node: Node, indent: string = "") {
-  if (node.hasOwnProperty("size")) {
-    console.log(
-      indent + (node as FileNode).name + " (" + (node as FileNode).size + ")"
-    );
-  } else {
-    console.log(indent + (node as DirNode).name);
-    (node as DirNode).children.forEach((child) => {
-      printTree(child, indent + "  ");
-    });
-  }
 }
