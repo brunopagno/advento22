@@ -8,7 +8,7 @@ export function part1(input: Array<string>): number {
   const sizeOfTree = sizeOf(tree);
   let total = sizeOfTree < 100000 ? sizeOfTree : 0;
   forEachNode(tree, (node: Node) => {
-    if (node.hasOwnProperty("children")) {
+    if (node.type == "folder") {
       const size = sizeOf(node);
       if (size < 100000) {
         total += size;
@@ -28,7 +28,7 @@ export function part2(input: Array<string>): number {
 
   let current = sizeOfTree;
   forEachNode(tree, (node: Node) => {
-    if (node.hasOwnProperty("children")) {
+    if (node.type == "folder") {
       const size = sizeOf(node);
       if (size >= target && size < current) {
         current = size;
@@ -41,63 +41,71 @@ export function part2(input: Array<string>): number {
 
 type Node = {
   name: string;
-};
-
-type DirNode = Node & {
-  parent?: DirNode;
+  type: "folder" | "file";
+  parent?: Node;
   children: Array<Node>;
-};
-
-type FileNode = Node & {
   size: number;
 };
 
 function forEachNode(node: Node, func: Function) {
   func(node);
   if (node.hasOwnProperty("children")) {
-    (node as DirNode).children.forEach((child) => {
+    node.children.forEach((child) => {
       forEachNode(child, func);
     });
   }
 }
 
-function sizeOf(node: Node): number {
-  if (node.hasOwnProperty("size")) {
-    return (node as FileNode).size;
+export function sizeOf(node: Node): number {
+  if (node.type == "file") {
+    return node.size;
   } else {
-    return (node as DirNode).children.reduce((acc, child) => {
+    return node.children.reduce((acc, child) => {
       return acc + sizeOf(child);
     }, 0);
   }
 }
 
-function buildTreeFrom(cmd: Array<string>): DirNode {
-  const root = { name: "/", children: [] } as DirNode;
+export function buildTreeFrom(cmd: Array<string>): Node {
+  const root = {
+    name: "/",
+    type: "folder",
+    children: [],
+    size: 0,
+  } as Node;
 
-  let cwd: DirNode = root;
+  let cwd: Node = root;
   cmd.slice(1).forEach((line) => {
     if (line.startsWith("$ cd")) {
       const target = line.split(" ")[2];
       if (target == "..") {
-        cwd = cwd.parent as DirNode;
+        if (!cwd.parent) {
+          throw new Error("Cannot cd .. from folder without parent");
+        }
+        cwd = cwd.parent;
       } else {
         cwd = cwd.children.find((child) => {
           return child.name == target;
-        }) as DirNode;
+        }) as Node;
       }
     } else if (line.startsWith("$ ls")) {
       // do nothing I think
     } else if (line.startsWith("dir")) {
       cwd.children.push({
         name: line.split(" ")[1],
+        type: "folder",
         children: [],
         parent: cwd,
-      } as DirNode);
+        size: 0,
+      });
     } else {
       cwd.children.push({
         name: line.split(" ")[1],
+        type: "file",
+        children: [],
+        parent: cwd,
         size: parseInt(line.split(" ")[0]),
-      } as FileNode);
+      });
     }
   });
 

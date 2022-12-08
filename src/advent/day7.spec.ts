@@ -1,7 +1,111 @@
 import { describe, expect, test } from "@jest/globals";
-import { part1, part2 } from "./day7";
+import { buildTreeFrom, sizeOf, part1, part2 } from "./day7";
 
 describe("day7", () => {
+  describe("buildTreeFrom", () => {
+    test("should build a tree from a list of commands", () => {
+      const input = [
+        "$ cd /",
+        "$ ls",
+        "dir a",
+        "dir aa",
+        "1234 b.txt",
+        "$ cd a",
+        "$ ls",
+        "4321 c.txt",
+        "$ cd ..",
+        "$ cd aa",
+        "$ ls",
+        "91824 d.txt",
+      ];
+      const tree = buildTreeFrom(input);
+      expect(tree).toEqual(
+        expect.objectContaining({
+          name: "/",
+          type: "folder",
+          children: [
+            {
+              name: "a",
+              type: "folder",
+              children: [
+                {
+                  name: "c.txt",
+                  type: "file",
+                  size: 4321,
+                  children: [],
+                  parent: expect.any(Object),
+                },
+              ],
+              size: 0,
+              parent: expect.any(Object),
+            },
+            {
+              name: "aa",
+              type: "folder",
+              children: [
+                {
+                  name: "d.txt",
+                  type: "file",
+                  size: 91824,
+                  children: [],
+                  parent: expect.any(Object),
+                },
+              ],
+              size: 0,
+              parent: expect.any(Object),
+            },
+            {
+              name: "b.txt",
+              type: "file",
+              size: 1234,
+              children: [],
+              parent: expect.any(Object),
+            },
+          ],
+        })
+      );
+    });
+  });
+
+  describe("sizeOf", () => {
+    test("should return the size of a node", () => {
+      const input = {
+        name: "a",
+        type: "folder" as const,
+        children: [
+          {
+            name: "d",
+            type: "folder" as const,
+            children: [
+              {
+                name: "e.txt",
+                type: "file" as const,
+                children: [],
+                size: 100,
+              },
+            ],
+            size: 0,
+          },
+          {
+            name: "b.txt",
+            type: "file" as const,
+            size: 1000,
+            children: [],
+          },
+          {
+            name: "c.txt",
+            type: "file" as const,
+            size: 10000,
+            children: [],
+          },
+        ],
+        size: 0,
+      };
+
+      expect(sizeOf(input)).toBe(11100);
+    });
+  });
+
   const testInput = [
     "$ cd /",
     "$ ls",
