@@ -29,7 +29,34 @@ export function part1(input: Array<string>): number {
 }
 
 export function part2(input: Array<string>): number {
-  return 0;
+  const tailVisited = new Array<Position>([0, 0]);
+  const knots = 10;
+
+  let snake = Array<Position>();
+  for (let i = 0; i < knots; i++) {
+    snake.push([0, 0]);
+  }
+
+  for (const line of input) {
+    const [direction, distance] = line.split(" ");
+    for (let i = 0; i < parseInt(distance); i++) {
+      snake[0] = move(snake[0], direction, 1);
+
+      for (let j = 1; j < knots; j++) {
+        snake[j] = follow(snake[j], snake[j - 1]);
+      }
+
+      const tail = snake[knots - 1];
+      const found = tailVisited.find(
+        (position) => position[0] == tail[0] && position[1] == tail[1]
+      );
+      if (!found) {
+        tailVisited.push(tail);
+      }
+    }
+  }
+
+  return tailVisited.length;
 }
 
 type Position = [number, number];
@@ -51,6 +78,23 @@ export function move(
       return [x + distance, y];
   }
   throw new Error(`Unknown direction: ${direction}`);
+}
+
+export function follow(current: Position, target: Position): Position {
+  if (distanceBetween(target, current) <= 1) {
+    return current;
+  }
+
+  if (target[0] == current[0]) {
+    return [current[0], current[1] + Math.sign(target[1] - current[1])];
+  } else if (target[1] == current[1]) {
+    return [current[0] + Math.sign(target[0] - current[0]), current[1]];
+  } else {
+    return [
+      current[0] + Math.sign(target[0] - current[0]),
+      current[1] + Math.sign(target[1] - current[1]),
+    ];
+  }
 }
 
 export function distanceBetween(position: Position, other: Position): number {
