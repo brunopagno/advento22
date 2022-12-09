@@ -3,34 +3,15 @@ export function solve(input: Array<string>): [number, number] {
 }
 
 export function part1(input: Array<string>): number {
-  const visited = new Array<Position>([0, 0]);
-
-  let head = [0, 0] as Position;
-  let tail = [0, 0] as Position;
-  for (const line of input) {
-    const [direction, distance] = line.split(" ");
-    for (let i = 0; i < parseInt(distance); i++) {
-      const next = move(head, direction, 1);
-      const distance = distanceBetween(next, tail);
-      if (distance > 1) {
-        tail = head;
-        const found = visited.find(
-          (position) => position[0] == tail[0] && position[1] == tail[1]
-        );
-        if (!found) {
-          visited.push(tail);
-        }
-      }
-      head = next;
-    }
-  }
-
-  return visited.length;
+  return snakeItHome(input, 2);
 }
 
 export function part2(input: Array<string>): number {
+  return snakeItHome(input, 10);
+}
+
+function snakeItHome(input: Array<string>, knots: number): number {
   const tailVisited = new Array<Position>([0, 0]);
-  const knots = 10;
 
   let snake = Array<Position>();
   for (let i = 0; i < knots; i++) {
