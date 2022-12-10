@@ -3,51 +3,51 @@ export function solve(input: Array<string>): [number, string] {
 }
 
 export function part1(input: Array<string>): number {
-  let device: Proto = { cycle: 0, X: 1, signal: 0 };
+  let proto: Proto = { cycle: 0, X: 1, signal: 0 };
 
   let sum = 0;
   let last = -1;
   for (const instruction of input) {
-    device = op(device, instruction);
-    if (device.signal !== last) {
-      sum += device.signal || 0;
-      last = device.signal || 0;
+    proto = op(proto, instruction);
+    if (proto.signal !== last) {
+      sum += proto.signal || 0;
+      last = proto.signal || 0;
     }
   }
 
   return sum;
 }
 
-export function op(device: Proto, input: string): Proto {
+export function op(proto: Proto, input: string): Proto {
   if (input.startsWith("addx")) {
     const value = parseInt(input.split(" ")[1]);
-    return addX(device, value);
+    return addX(proto, value);
   } else if (input.startsWith("noop")) {
-    return noop(device);
+    return noop(proto);
   }
 
-  return device;
+  return proto;
 }
 
-function addX(device: Proto, value: number): Proto {
-  const nextCycle = device.cycle + 2;
-  updateSignal(device, nextCycle);
-  return { ...device, cycle: nextCycle, X: device.X + value };
+function addX(proto: Proto, value: number): Proto {
+  const nextCycle = proto.cycle + 2;
+  updateSignal(proto, nextCycle);
+  return { ...proto, cycle: nextCycle, X: proto.X + value };
 }
 
-function noop(device: Proto): Proto {
-  const nextCycle = device.cycle + 1;
-  updateSignal(device, nextCycle);
-  return { ...device, cycle: nextCycle };
+function noop(proto: Proto): Proto {
+  const nextCycle = proto.cycle + 1;
+  updateSignal(proto, nextCycle);
+  return { ...proto, cycle: nextCycle };
 }
 
-function updateSignal(device: Proto, nextCycle: number) {
+function updateSignal(proto: Proto, nextCycle: number) {
   const overLastCycleAmount = (nextCycle - 20) % 40;
   if (
-    (nextCycle >= 20 && !device.signal) ||
-    overLastCycleAmount < (device.cycle - 20) % 40
+    (nextCycle >= 20 && !proto.signal) ||
+    overLastCycleAmount < (proto.cycle - 20) % 40
   ) {
-    device.signal = (nextCycle - overLastCycleAmount) * device.X;
+    proto.signal = (nextCycle - overLastCycleAmount) * proto.X;
   }
 }
 
