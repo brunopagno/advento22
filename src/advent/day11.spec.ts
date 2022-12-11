@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { parse, part1, part2 } from "./day11";
+import { parse, extractOperation, part1, part2 } from "./day11";
 
 describe("Day 11", () => {
   describe("parse", () => {
@@ -17,19 +17,31 @@ describe("Day 11", () => {
       expect(parse(input)).toEqual([
         {
           id: 0,
-          items: [10, 20],
+          items: [10n, 20n],
           operation: expect.any(Function),
           test: {
-            divisibleBy: 2,
-            trueTarget: 2,
-            falseTarget: 1,
+            divisibleBy: 2n,
+            trueTarget: 2n,
+            falseTarget: 1n,
           },
           inspectedAmount: 0,
         },
       ]);
     });
-    test("should execute the operation and return the correct result", () => {
-      expect(parse(input)[0].operation(10)).toEqual(11);
+  });
+
+  describe("extractOperation", () => {
+    test("should return a function that adds 1 to the input", () => {
+      const op = "  Operation: new = old + 1";
+      expect(extractOperation(op)(10n)).toEqual(11n);
+    });
+    test("should return a function that multiplies the input by 2", () => {
+      const op = "  Operation: new = old * 2";
+      expect(extractOperation(op)(10n)).toEqual(20n);
+    });
+    test("should return a function that uses old as the second argument", () => {
+      const op = "  Operation: new = old * old";
+      expect(extractOperation(op)(10n)).toEqual(100n);
     });
   });
 
@@ -72,7 +84,7 @@ describe("Day 11", () => {
 
   describe("part2", () => {
     test("should solve for the test input", () => {
-      expect(part2(testInput)).toBe(0);
+      expect(part2(testInput)).toBe(2713310158);
     });
   });
 });
