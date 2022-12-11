@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc",
     "it": "npm run build && node ./dist/index.js",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "generate": "node ./generator/index.js"
   },
   "author": "Bruno Pagno",
   "license": "MIT",
