@@ -17,12 +17,12 @@ describe("Day 11", () => {
       expect(parse(input)).toEqual([
         {
           id: 0,
-          items: [10n, 20n],
+          items: [10, 20],
           operation: expect.any(Function),
           test: {
-            divisibleBy: 2n,
-            trueTarget: 2n,
-            falseTarget: 1n,
+            divisibleBy: 2,
+            trueTarget: 2,
+            falseTarget: 1,
           },
           inspectedAmount: 0,
         },
@@ -33,15 +33,15 @@ describe("Day 11", () => {
   describe("extractOperation", () => {
     test("should return a function that adds 1 to the input", () => {
       const op = "  Operation: new = old + 1";
-      expect(extractOperation(op)(10n)).toEqual(11n);
+      expect(extractOperation(op)(10)).toEqual(11);
     });
     test("should return a function that multiplies the input by 2", () => {
-      const op = "  Operation: new = old * 2";
-      expect(extractOperation(op)(10n)).toEqual(20n);
+      const op = "  Operation: new = 2 * old";
+      expect(extractOperation(op)(10)).toEqual(20);
     });
     test("should return a function that uses old as the second argument", () => {
       const op = "  Operation: new = old * old";
-      expect(extractOperation(op)(10n)).toEqual(100n);
+      expect(extractOperation(op)(10)).toEqual(100);
     });
   });
 
