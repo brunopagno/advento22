@@ -31,13 +31,15 @@ export function part2(input: Array<string>): number {
     }
   }
 
-  const paths = allGrids
-    .map((grid) => {
-      process.stdout.write(".");
-      return findPath(grid);
-    })
-    .filter((path) => path.length > 0);
-  const pathLengths = paths.map((path) => path.length);
+  const paths: Array<Array<Position>> = [];
+  for (const grid of allGrids) {
+    process.stdout.write(".");
+    paths.push(findPath(grid));
+  }
+
+  const pathLengths = paths
+    .filter((path) => path.length > 0)
+    .map((path) => path.length);
   return Math.min(...pathLengths);
 }
 
@@ -50,7 +52,7 @@ type Node = {
 
 type Grid = Array<Array<number>>;
 
-export function findPath(grid: Grid, solutions?: Array<Grid>): Array<Position> {
+export function findPath(grid: Grid): Array<Position> {
   const start = findPositionOf(ME, grid);
   const end = findPositionOf(TARGET, grid);
 
@@ -131,10 +133,7 @@ export function findPossibleSuccessors(
   return possible;
 }
 
-export function findPositionOf(
-  target: number,
-  grid: Grid
-): Position {
+export function findPositionOf(target: number, grid: Grid): Position {
   for (let x = 0; x < grid.length; x++) {
     const row = grid[x];
     for (let y = 0; y < row.length; y++) {
