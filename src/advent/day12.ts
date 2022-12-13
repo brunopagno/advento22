@@ -19,7 +19,7 @@ export function part2(input: Array<string>): number {
   const originalOrigin = findPositionOf(ME, grid);
   const a = "a".charCodeAt(0);
   grid[originalOrigin[0]][originalOrigin[1]] = a;
-  const allGrids = Array<Array<Array<number>>>();
+  const allGrids = Array<Grid>();
   for (let i = 0; i < grid.length; i++) {
     const row = grid[i];
     for (let j = 0; j < row.length; j++) {
@@ -34,7 +34,7 @@ export function part2(input: Array<string>): number {
   const paths = allGrids
     .map((grid) => {
       process.stdout.write(".");
-      return findPath(grid)
+      return findPath(grid);
     })
     .filter((path) => path.length > 0);
   const pathLengths = paths.map((path) => path.length);
@@ -48,7 +48,9 @@ type Node = {
   g: number;
 };
 
-export function findPath(grid: Array<Array<number>>): Array<Position> {
+type Grid = Array<Array<number>>;
+
+export function findPath(grid: Grid, solutions?: Array<Grid>): Array<Position> {
   const start = findPositionOf(ME, grid);
   const end = findPositionOf(TARGET, grid);
 
@@ -109,7 +111,7 @@ export function findPath(grid: Array<Array<number>>): Array<Position> {
 
 export function findPossibleSuccessors(
   position: Position,
-  grid: Array<Array<number>>
+  grid: Grid
 ): Array<Position> {
   const [x, y] = position;
   const current = grid[x][y];
@@ -131,7 +133,7 @@ export function findPossibleSuccessors(
 
 export function findPositionOf(
   target: number,
-  grid: Array<Array<number>>
+  grid: Grid
 ): Position {
   for (let x = 0; x < grid.length; x++) {
     const row = grid[x];
@@ -158,6 +160,6 @@ export function canMove(from: number, to: number) {
   return from + 1 >= to;
 }
 
-function buildGrid(input: Array<string>): Array<Array<number>> {
+function buildGrid(input: Array<string>): Grid {
   return input.map((row) => row.split("").map((c) => c.charCodeAt(0)));
 }
