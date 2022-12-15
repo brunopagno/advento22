@@ -20,7 +20,7 @@ describe("Day 14", () => {
         502: [0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
         503: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
       };
-      expect(parse(input)).toEqual(expected);
+      expect(parse(input, [494, 503, 9])).toEqual(expected);
     });
   });
 
@@ -47,7 +47,7 @@ describe("Day 14", () => {
 
   describe("part2", () => {
     test("should solve for test input", () => {
-      expect(part2(testInput)).toBe(0);
+      expect(part2(testInput)).toBe(93);
     });
   });
 });

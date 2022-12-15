@@ -3,9 +3,9 @@ export function solve(input: Array<string>): [number, number] {
 }
 
 export function part1(input: Array<string>): number {
-  const slice = parse(input);
-
   const boundaries = findBoundaries(input);
+  const slice = parse(input, boundaries);
+
   let dropped = dropGrainOfSand(slice, 500, 0, boundaries);
 
   let count = 0;
@@ -13,13 +13,28 @@ export function part1(input: Array<string>): number {
     dropped = dropGrainOfSand(slice, 500, 0, boundaries);
     count++;
   }
-  console.log(count);
 
   return count;
 }
 
 export function part2(input: Array<string>): number {
-  return 0;
+  let boundaries = findBoundaries(input);
+  const x1 = boundaries[0] - 1000;
+  const x2 = boundaries[1] + 1000;
+
+  const y = boundaries[2] + 2;
+  input.push(`${x1},${y} -> ${x2},${y}`);
+  boundaries = findBoundaries(input);
+  const slice = parse(input, boundaries);
+
+  let dropped = dropGrainOfSand(slice, 500, 0, boundaries);
+  let count = 0;
+  while (dropped) {
+    dropped = dropGrainOfSand(slice, 500, 0, boundaries);
+    count++;
+  }
+
+  return count;
 }
 
 const AIR = 0;
@@ -27,14 +42,19 @@ const ROCK = 1;
 const SAND = 2;
 
 type VerticalSlice = { [key: number]: Array<number> };
+type Boundaries = [number, number, number];
 
 export function dropGrainOfSand(
   vs: VerticalSlice,
   x: number,
   y: number,
-  bounds: [number, number, number]
+  bounds: Boundaries
 ): boolean {
   const target = vs[x].findIndex((v, i) => i >= y && v > AIR);
+  if (target === 0) {
+    return false;
+  }
+
   if (target > -1) {
     if (x - 1 < bounds[0] || x + 1 > bounds[1]) {
       return false;
@@ -53,12 +73,14 @@ export function dropGrainOfSand(
   return false;
 }
 
-export function parse(input: Array<string>): VerticalSlice {
+export function parse(
+  input: Array<string>,
+  boundaries: Boundaries
+): VerticalSlice {
   const slice: VerticalSlice = {
     500: [],
   };
 
-  const boundaries = findBoundaries(input);
   for (let x = boundaries[0]; x <= boundaries[1]; x++) {
     slice[x] = [];
     for (let y = 0; y <= boundaries[2]; y++) {
@@ -91,7 +113,7 @@ export function parse(input: Array<string>): VerticalSlice {
   return slice;
 }
 
-export function findBoundaries(input: Array<string>): [number, number, number] {
+export function findBoundaries(input: Array<string>): Boundaries {
   let [minX, maxX, maxY] = [Number.MAX_SAFE_INTEGER, 0, 0];
   for (const line of input) {
     const steps = line.split(" -> ");
