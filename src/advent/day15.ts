@@ -3,28 +3,26 @@ export function solve(input: Array<string>): [number, number] {
 }
 
 export function part1(input: Array<string>, row: number): number {
-  const parsed = parse(input);
-
-  const targetRow: Array<Paint> = [];
-  for (const [sensor, beacon] of parsed) {
-    const dBeacon = distanceBetween(sensor, beacon);
-    const dRow = distanceBetween(sensor, { x: sensor.x, y: 10 });
-
-    targetRow.push({ x: sensor.x, width: dBeacon - dRow });
-  }
-
   const result = new Set<number>();
-  for (const paint of targetRow) {
-    if (paint.width >= 0) {
-      const from = paint.x - paint.width;
-      const to = paint.x + paint.width;
-      for (let i = from; i <= to; i++) {
-        result.add(i);
-      }
+
+  const parsed = parse(input);
+  for (let [sensor, beacon] of parsed) {
+    const yDist = Math.abs(row - sensor.y);
+    const sensorRadius = distanceBetween(sensor, beacon);
+
+    if (yDist > sensorRadius) {
+      continue;
+    }
+    const span = sensorRadius - yDist;
+    const from = sensor.x - span;
+    const to = sensor.x + span;
+
+    for (let i = from; i <= to; i++) {
+      result.add(i);
     }
   }
 
-  for (const [sensor, beacon] of parsed) {
+  for (let [sensor, beacon] of parsed) {
     if (sensor.y === row) {
       result.delete(sensor.x);
     }
