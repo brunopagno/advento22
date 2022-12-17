@@ -53,7 +53,7 @@ describe("Day 15", () => {
 
   describe("part2", () => {
     test("should solve for test input", () => {
-      expect(part2(testInput)).toBe(0);
+      expect(part2(testInput, 20)).toBe(56000011);
     });
   });
 });
