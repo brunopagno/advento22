@@ -10,14 +10,16 @@ describe("Day 15", () => {
           "Sensor at x=9, y=16: closest beacon is at x=10, y=16",
         ])
       ).toEqual([
-        [
-          { x: 2, y: 18 },
-          { x: -2, y: 15 },
-        ],
-        [
-          { x: 9, y: 16 },
-          { x: 10, y: 16 },
-        ],
+        {
+          position: { x: 2, y: 18 },
+          beacon: { x: -2, y: 15 },
+          distance: 7,
+        },
+        {
+          position: { x: 9, y: 16 },
+          beacon: { x: 10, y: 16 },
+          distance: 1,
+        },
       ]);
     });
   });
