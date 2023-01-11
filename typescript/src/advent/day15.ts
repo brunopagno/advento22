@@ -36,6 +36,7 @@ export function part2(input: Array<string>, maxSize: number): number {
 
   //const startingRow = 2906101;
   const startingRow = 0;
+  startingRow += 1;
   for (let row = startingRow; row < maxSize; row += 1) {
     const ranges = findRanges(parsed, row);
     const sorted = ranges.sort((a, b) => a[0] - b[0]);
@@ -43,13 +44,13 @@ export function part2(input: Array<string>, maxSize: number): number {
     let gap = -1;
     let [_, previousEnd] = sorted[0];
     for (let i = 1; i < ranges.length; i++) {
-        const [start, end] = ranges[i]; 
-        if (start > previousEnd) {
-            gap = start - 1;
-            break;
-        } else if (end > previousEnd) {
-            previousEnd = end;
-        }
+      const [start, end] = ranges[i];
+      if (start > previousEnd) {
+        gap = start - 1;
+        break;
+      } else if (end > previousEnd) {
+        previousEnd = end;
+      }
     }
 
     if (gap > -1) {
