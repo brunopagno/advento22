@@ -22,31 +22,9 @@ fn part1(input: &str) -> Option<u32> {
         let half = chars.len() / 2;
         let (comp_a, comp_b) = chars.split_at_mut(half);
 
-        comp_a.sort();
-        comp_b.sort();
-
-        let mut backpack_a = Backpack {
-            items: comp_a.to_vec(),
-            index: 0,
-        };
-        let mut backpack_b = Backpack {
-            items: comp_b.to_vec(),
-            index: 0,
-        };
-
-        while backpack_a.index <= backpack_a.items.len() || backpack_b.index <= backpack_b.items.len()
-        {
-            let comparison =
-                (backpack_a.items[backpack_a.index]).cmp(&(backpack_b.items[backpack_b.index]));
-
-            match comparison {
-                Ordering::Equal => {
-                    total += calculate_priority(backpack_a.items[backpack_a.index]);
-                    break;
-                }
-                Ordering::Less => backpack_a.index += 1,
-                Ordering::Greater => backpack_b.index += 1,
-            }
+        match find_common_item(&vec![comp_a.to_vec(), comp_b.to_vec()]) {
+            Some(value) => total += value,
+            None => println!("did not find the common item!"),
         }
     }
 
@@ -55,6 +33,39 @@ fn part1(input: &str) -> Option<u32> {
 
 fn part2(_input: &str) -> Option<u32> {
     return Some(0);
+}
+
+fn find_common_item(compartments_param: &Vec<Vec<u32>>) -> Option<u32> {
+    let mut compartments: Vec<Backpack> = compartments_param
+        .iter()
+        .map(|c| {
+            let mut items = c.to_vec();
+            items.sort();
+            return Backpack { items, index: 0 };
+        })
+        .collect();
+
+    while compartments.iter().all(|c| c.index < c.items.len()) {
+        let current_items: Vec<u32> = compartments.iter().map(|c| c.items[c.index]).collect();
+
+        let all_items_equal = current_items
+            .iter()
+            .all(|i| i.cmp(&current_items[0]) == Ordering::Equal);
+
+        if all_items_equal {
+            return Some(calculate_priority(current_items[0]));
+        }
+
+        let min_value = current_items.iter().min().unwrap();
+
+        for mut compartment in &mut compartments {
+            if compartment.items[compartment.index] == *min_value {
+                compartment.index += 1;
+            }
+        }
+    }
+
+    return None;
 }
 
 fn calculate_priority(value: u32) -> u32 {
@@ -84,5 +95,17 @@ CrZsJsPPZsGzwwsLwLmpwMDw";
     #[test]
     fn test_part2() {
         assert_eq!(70, part2(TEST_INPUT).unwrap());
+    }
+
+    #[test]
+    fn test_find_common_item() {
+        let items = vec![vec![97, 101, 113, 100, 98], vec![125, 99, 100, 108, 103]];
+        assert_eq!(4, find_common_item(&items).unwrap());
+    }
+
+    #[test]
+    fn test_not_find_common_item() {
+        let items = vec![vec![99], vec![103]];
+        assert_eq!(None, find_common_item(&items));
     }
 }
