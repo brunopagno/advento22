@@ -31,8 +31,39 @@ fn part1(input: &str) -> Option<u32> {
     return Some(total);
 }
 
-fn part2(_input: &str) -> Option<u32> {
-    return Some(0);
+fn part2(input: &str) -> Option<u32> {
+    let mut total = 0;
+
+    let all_lines = input.split('\n').into_iter();
+    for i in (0..all_lines.clone().count()).step_by(3) {
+        let group: Vec<Vec<u32>> = vec![
+            all_lines
+                .clone()
+                .nth(i)?
+                .chars()
+                .map(|c| c as u32)
+                .collect(),
+            all_lines
+                .clone()
+                .nth(i + 1)?
+                .chars()
+                .map(|c| c as u32)
+                .collect(),
+            all_lines
+                .clone()
+                .nth(i + 2)?
+                .chars()
+                .map(|c| c as u32)
+                .collect(),
+        ];
+
+        match find_common_item(&group) {
+            Some(value) => total += value,
+            None => println!("did not find the common item!"),
+        }
+    }
+
+    return Some(total);
 }
 
 fn find_common_item(compartments_param: &Vec<Vec<u32>>) -> Option<u32> {
