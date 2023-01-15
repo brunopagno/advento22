@@ -35,27 +35,14 @@ fn part2(input: &str) -> Option<u32> {
     let mut total = 0;
 
     let all_lines = input.split('\n').into_iter();
-    for i in (0..all_lines.clone().count()).step_by(3) {
-        let group: Vec<Vec<u32>> = vec![
-            all_lines
-                .clone()
-                .nth(i)?
-                .chars()
-                .map(|c| c as u32)
-                .collect(),
-            all_lines
-                .clone()
-                .nth(i + 1)?
-                .chars()
-                .map(|c| c as u32)
-                .collect(),
-            all_lines
-                .clone()
-                .nth(i + 2)?
-                .chars()
-                .map(|c| c as u32)
-                .collect(),
-        ];
+    let amount = 3;
+    for i in (0..all_lines.clone().count()).step_by(amount) {
+        let group = all_lines
+            .clone()
+            .skip(i)
+            .take(amount)
+            .map(|line| line.chars().map(|c| c as u32).collect())
+            .collect();
 
         match find_common_item(&group) {
             Some(value) => total += value,
