@@ -34,11 +34,11 @@ fn part1(input: &str) -> Option<u32> {
 fn part2(input: &str) -> Option<u32> {
     let mut total = 0;
 
-    let all_lines = input.split('\n').into_iter();
+    let all_lines: Vec<&str> = input.split('\n').into_iter().collect();
     let amount = 3;
-    for i in (0..all_lines.clone().count()).step_by(amount) {
+    for i in (0..all_lines.len()).step_by(amount) {
         let group = all_lines
-            .clone()
+            .iter()
             .skip(i)
             .take(amount)
             .map(|line| line.chars().map(|c| c as u32).collect())
